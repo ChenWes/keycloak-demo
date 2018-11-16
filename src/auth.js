@@ -1,30 +1,30 @@
-import Keycloak from 'keycloak-js';
+import KeycloakApp from 'keycloak-js';
 
-export const keycloak = Keycloak({
-    url: 'http://auth.dev.k8s.esquel.cloud/auth',
-    realm: 'esquel-sit',
-    clientId: 'passport',
+export const keycloak = KeycloakApp({
+    url: 'http://localhost:8080/auth',
+    realm: 'TestProject',
+    clientId: 'democlient'
 });
 
 export default () => {
-
     console.log('初始化keycloak>', keycloak)
-
     keycloak.init()
         .success((authenticated) => {
             console.log('初始化keycloak后>', authenticated)
             if (!authenticated)
                 keycloak.login()
             else {
-                getUserGroups()
-                    .then((groups) => {
-                        console.log('已登陆keycloak后>', groups)
-                        console.log(groups);
+                keycloak.loadUserInfo()
+                    .then((userInfo) => {
+                        console.log('成功获取用户信息>', userInfo)
                     })
+                    .catch((err) => {
+                        console.log('获取用户信息出错>', err)
+                    });
             }
         })
-        .error(() => {
-            keycloak.login();
+        .error((err) => {
+            console.log('初始化已经出错>', err)
         })
 }
 
@@ -44,8 +44,8 @@ export const loadUserInfo = () => new Promise((resolve, reject) => {
 })
 
 export const getUserGroups = async () => {
-    const userInfo = await loadUserInfo()
-    return userInfo && userInfo.groups || []
+    const userInfo = await loadUserInfo();
+    return userInfo;
 }
 
 keycloak.onAuthSuccess = function () {
@@ -53,7 +53,7 @@ keycloak.onAuthSuccess = function () {
 }
 
 keycloak.onAuthError = function (errorData) {
-    console.log(`Auth Success: ${JSON.stringify(errorData)}`)
+    console.log(`Auth Error: ${JSON.stringify(errorData)}`)
 }
 
 keycloak.onAuthRefreshSuccess = function () {
