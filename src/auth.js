@@ -1,9 +1,9 @@
 import KeycloakApp from 'keycloak-js';
 
 export const keycloak = KeycloakApp({
-    url: 'http://localhost:8080/auth',
-    realm: 'TestProject',
-    clientId: 'democlient'
+    url: 'http://172.17.130.170:8082/auth',
+    realm: 'react',
+    clientId: 'reactclient'
 });
 
 export default () => {
