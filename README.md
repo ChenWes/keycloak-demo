@@ -21,7 +21,7 @@ git clone https://github.com/ChenWes/keycloak-demo
 ## 第三步：在keycloak中创建一个client
 在刚创建的realm中创建一个client，
 * 指定相应的client名称，
-* 指定client的Valid Redirect URIs（例如本例的http://localhost:3000）
+* 指定client的Valid Redirect URIs（例如本例的http://localhost:3000/）
 * 指定Web Origins为*
 
 ## 第四步：在keycloak中创建一个用户
